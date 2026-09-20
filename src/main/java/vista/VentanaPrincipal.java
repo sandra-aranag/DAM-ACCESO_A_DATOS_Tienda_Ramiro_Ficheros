@@ -299,7 +299,7 @@ public class VentanaPrincipal extends JFrame {
         if (ruta == null) return;
         try {
             switch (formato) {
-                case "TXT" -> System.out.println("No implementado");
+                case "TXT" -> GestorFicheros.exportarProductosTxt(ruta, servicio.getProductos());
                 case "CSV" -> System.out.println("No implementado");
                 case "JSON" -> System.out.println("No implementado");
                 case "XML" -> System.out.println("No implementado");
@@ -329,10 +329,8 @@ public class VentanaPrincipal extends JFrame {
                     System.out.println("XML todavía no implementado");
                     yield new ArrayList<>();
                 }
-                default -> {
-                    System.out.println("TXT todavía no implementado");
-                    yield new ArrayList<>();
-                }
+                default -> GestorFicheros.importarProductosTxt(ruta);
+
             };
             servicio.getProductos().clear();
             servicio.getProductos().addAll(datos);

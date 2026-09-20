@@ -61,12 +61,60 @@ public class GestorFicheros {
         return resultado;
     }
 
-    private static List<String> parseCsv(String linea){
+   /*private static List<String> parseCsv(String linea){
         //para hacer el split y que si va entre comillas, que lo identifique como un único campo
 
     }
 
     public static void exportarClientesCSV(){
+
+    } */
+
+    public static void exportarProductosTxt(Path ruta, List<Producto> productos) throws IOException{
+
+        try (BufferedWriter bw = Files.newBufferedWriter(ruta, StandardCharsets.UTF_8)){
+
+            for (Producto p : productos ) {
+                bw.write(p.getId() +";"+ p.getNombre() +";+"+ p.getStock() +";"+  p.getPrecio());
+                bw.newLine();
+            }
+
+        }
+    }
+
+    public static List<Producto> importarProductosTxt(Path ruta) throws  IOException{
+
+        List<Producto> resultado = new ArrayList<>();
+
+        try(BufferedReader br = Files.newBufferedReader(ruta, StandardCharsets.UTF_8)){
+            String linea;
+
+            while ((linea = br.readLine()) != null){
+
+                String[] p = linea.split(";", -1);
+
+                if (p.length != 4) {
+                    continue;
+                }
+
+                try{
+                    int id = Integer.parseInt(p[0]);
+                    String nombre = p[1];
+                    int stock = Integer.parseInt(p[2]);
+                    double precio = Double.parseDouble(p[3]);
+
+                    Producto producto = new Producto(id, nombre, stock, (int)precio);
+                    resultado.add(producto);
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Producto incorrecto: " + linea);
+                }
+
+
+            }
+
+        }
+        return resultado;
 
     }
 
